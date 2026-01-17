@@ -193,36 +193,36 @@ function OverrideXPreland() {
             {/* Top Bar */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 20px',
+              padding: '10px 12px',
               borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
               background: 'rgba(0, 0, 0, 0.3)'
             }}>
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
-                fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+                fontFamily: "'JetBrains Mono', monospace", fontSize: '9px',
                 color: '#3b82f6', background: 'rgba(59, 130, 246, 0.1)',
-                padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(59, 130, 246, 0.2)'
+                padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(59, 130, 246, 0.2)',
+                maxWidth: '140px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'
               }}>
                 <Lock size={10} />
                 <span>ENCRYPTED SESSION: {sessionId.substring(0, 8)}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <LanguageSwitcher />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px' }}>
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
-                    style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
+                    style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
                   />
                   <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
-                  <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>{t('online')}</span>
                 </div>
               </div>
             </div>
 
             {/* Header */}
-            <div style={{ padding: '24px 24px 16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <div style={{ padding: '20px 16px 12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 {/* Logo - 1win with blend mode to hide dark bg */}
                 <motion.div
                   whileHover={{ scale: 1.08 }}
@@ -233,7 +233,7 @@ function OverrideXPreland() {
                     src="/1win-logo.png"
                     alt="1win"
                     style={{
-                      height: '38px',
+                      height: '32px',
                       mixBlendMode: 'lighten'
                     }}
                   />

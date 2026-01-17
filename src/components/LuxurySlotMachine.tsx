@@ -262,12 +262,13 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
 
     return (
         <div style={{
-            borderRadius: '12px', padding: '24px',
-            background: '#05070a', // Deep black
-            border: '4px solid #1e293b', // Bezel
+            borderRadius: '12px', padding: '16px', // Reduced padding for mobile
+            background: '#05070a',
+            border: '4px solid #1e293b',
             boxShadow: 'inset 0 0 50px rgba(0,0,0,1), 0 0 0 1px rgba(255,255,255,0.1)',
             position: 'relative', overflow: 'hidden',
-            fontFamily: "'Orbitron', 'JetBrains Mono', monospace" // Digital font feeling
+            fontFamily: "'Orbitron', 'JetBrains Mono', monospace",
+            width: '100%', maxWidth: '100%', boxSizing: 'border-box' // Ensure it stays within width
         }}>
             {/* Scanlines & Grid */}
             <div style={{
@@ -280,18 +281,21 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
                 pointerEvents: 'none'
             }} />
 
-            <div style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace', marginBottom: '8px', letterSpacing: '2px', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
                 {/* PROMO CODE LABEL */}
                 • SECRET KEY GENERATED •
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                 <motion.span
                     animate={glitch ? { x: [0, -3, 3, -1, 0], skewX: [0, 5, -3, 0] } : {}}
                     transition={{ duration: 0.15 }}
                     style={{
-                        fontSize: '32px', fontWeight: 900, letterSpacing: '4px',
-                        color: '#22d3ee', // Cyan Neon
+                        // Clamp: min 20px, preferred 7vw, max 32px
+                        fontSize: 'clamp(20px, 7vw, 32px)',
+                        fontWeight: 900,
+                        letterSpacing: 'clamp(1px, 1vw, 4px)', // Responsive spacing
+                        color: '#22d3ee',
                         fontFamily: "'Courier New', monospace",
                         textShadow: `
                             0 0 5px #06b6d4,
@@ -299,7 +303,9 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
                             0 0 20px #06b6d4,
                             0 0 40px #0891b2
                         `,
-                        filter: glitch ? 'hue-rotate(90deg)' : 'none'
+                        filter: glitch ? 'hue-rotate(90deg)' : 'none',
+                        wordBreak: 'break-all', // Ensure it doesn't overflow
+                        lineHeight: 1.2
                     }}
                 >
                     OVERRIDE777
