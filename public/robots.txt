@@ -1,0 +1,5 @@
+# 1WIN VIP Promo
+User-agent: *
+Disallow: /
+
+# Block all crawlers - private promo page
