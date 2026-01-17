@@ -74,15 +74,26 @@ function OverrideXPreland() {
   const feed = LIVE_MESSAGES[feedIndex];
 
   const cardStyle: React.CSSProperties = {
-    background: '#0a101f',
+    // Glassmorphism 2.0 - Heavy Glass
+    background: 'rgba(13, 18, 30, 0.75)',
+    backdropFilter: 'blur(25px)',
+    WebkitBackdropFilter: 'blur(25px)',
     borderRadius: '24px',
-    border: '2px solid rgba(59, 130, 246, 0.3)',
+
+    // Titanium Border (1px metallic gradient)
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    borderTop: '1px solid rgba(255, 255, 255, 0.15)',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.4)',
+
+    // Deep Layered Shadows (Floating Effect)
     boxShadow: `
-      0 0 0 1px rgba(59, 130, 246, 0.1),
-      0 0 80px -20px rgba(59, 130, 246, 0.4),
-      0 25px 50px -12px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05)
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03), /* Inner edge definition */
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),   /* Top inner highlight */
+      0 20px 40px -10px rgba(0, 0, 0, 0.8),      /* Deep drop shadow */
+      0 0 20px rgba(0, 0, 0, 0.5),               /* Ambient soft shadow */
+      0 0 0 1px rgba(0, 0, 0, 0.2)               /* Outer dark rim */
     `,
+
     overflow: 'hidden',
     position: 'relative'
   };
@@ -186,9 +197,14 @@ function OverrideXPreland() {
               borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
               background: 'rgba(0, 0, 0, 0.3)'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'monospace', fontSize: '10px', color: 'rgba(148, 163, 184, 0.7)' }}>
-                <Lock size={11} color="#3b82f6" />
-                <span>SESSION: {sessionId}</span>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+                color: '#3b82f6', background: 'rgba(59, 130, 246, 0.1)',
+                padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Lock size={10} />
+                <span>ENCRYPTED SESSION: {sessionId.substring(0, 8)}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <LanguageSwitcher />
@@ -300,35 +316,41 @@ function OverrideXPreland() {
             {/* Live Feed */}
             <div style={{ padding: '0 16px 16px' }}>
               <div style={{
-                borderRadius: '14px', padding: '14px 18px',
-                background: 'rgba(0, 0, 0, 0.4)',
-                border: '1px solid rgba(255, 255, 255, 0.05)'
+                borderRadius: '12px', padding: '12px 16px',
+                background: 'rgba(5, 7, 10, 0.6)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                    <motion.div
-                      animate={{ opacity: [1, 0.5, 1] }}
-                      transition={{ repeat: Infinity, duration: 1 }}
-                      style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }}
-                    />
-                    <span style={{ fontSize: '10px', fontWeight: 700, color: '#22c55e', textTransform: 'uppercase' }}>LIVE</span>
-                  </div>
-                  <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.1)' }} />
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={feedIndex}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}
-                    >
-                      <span>{feed.icon}</span>
-                      <span style={{ color: '#0ea5e9', fontFamily: 'monospace', fontWeight: 700 }}>{feed.user}</span>
-                      <span style={{ color: 'rgba(148, 163, 184, 0.8)' }}>{feed.action}</span>
-                    </motion.div>
-                  </AnimatePresence>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                  <motion.div
+                    animate={{ opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }}
+                  />
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>LIVE</span>
                 </div>
+
+                <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.1)' }} />
+
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={feedIndex}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      fontSize: '11px',
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      fontFamily: "'JetBrains Mono', 'Consolas', monospace",
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    <span style={{ color: '#64748b' }}>{feed.user}:</span> {feed.action}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
 
@@ -340,15 +362,15 @@ function OverrideXPreland() {
               background: 'rgba(0, 0, 0, 0.2)'
             }}>
               {[
-                { icon: <Zap size={10} />, label: 'SECURE' },
-                { icon: <Shield size={10} />, label: 'SSL 256-BIT' },
+                { icon: <Zap size={10} />, label: t('secure') },
+                { icon: <Shield size={10} />, label: t('ssl') },
                 { icon: null, label: '18+' }
               ].map((badge, i) => (
                 <div key={i} style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '8px 12px', borderRadius: '8px',
+                  padding: '6px 10px', borderRadius: '6px',
                   background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)'
+                  border: '1px solid rgba(255, 255, 255, 0.04)'
                 }}>
                   {badge.icon && <span style={{ color: '#3b82f6' }}>{badge.icon}</span>}
                   <span style={{ fontSize: '9px', fontWeight: 600, color: 'rgba(148, 163, 184, 0.8)', letterSpacing: '0.5px' }}>{badge.label}</span>

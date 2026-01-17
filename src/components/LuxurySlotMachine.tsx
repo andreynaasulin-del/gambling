@@ -262,20 +262,27 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
 
     return (
         <div style={{
-            borderRadius: '16px', padding: '20px',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
-            border: '2px solid rgba(251, 191, 36, 0.4)',
-            boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5), 0 0 30px rgba(251, 191, 36, 0.15)',
-            position: 'relative', overflow: 'hidden'
+            borderRadius: '12px', padding: '24px',
+            background: '#05070a', // Deep black
+            border: '4px solid #1e293b', // Bezel
+            boxShadow: 'inset 0 0 50px rgba(0,0,0,1), 0 0 0 1px rgba(255,255,255,0.1)',
+            position: 'relative', overflow: 'hidden',
+            fontFamily: "'Orbitron', 'JetBrains Mono', monospace" // Digital font feeling
         }}>
-            {/* Scanlines */}
+            {/* Scanlines & Grid */}
             <div style={{
-                position: 'absolute', inset: 0, opacity: 0.05,
-                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)'
+                position: 'absolute', inset: 0, opacity: 0.1,
+                backgroundImage: `
+                    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))
+                `,
+                backgroundSize: '100% 2px, 3px 100%',
+                pointerEvents: 'none'
             }} />
 
-            <div style={{ fontSize: '10px', color: 'rgba(251, 191, 36, 0.6)', fontFamily: 'monospace', marginBottom: '8px', letterSpacing: '2px' }}>
-        // PROMO_CODE
+            <div style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace', marginBottom: '8px', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                {/* PROMO CODE LABEL */}
+                • SECRET KEY GENERATED •
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
@@ -283,9 +290,16 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
                     animate={glitch ? { x: [0, -3, 3, -1, 0], skewX: [0, 5, -3, 0] } : {}}
                     transition={{ duration: 0.15 }}
                     style={{
-                        fontSize: '28px', fontWeight: 900, letterSpacing: '3px',
-                        color: '#fbbf24', fontFamily: 'monospace',
-                        textShadow: '0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.4), 0 0 40px rgba(251, 191, 36, 0.2)'
+                        fontSize: '32px', fontWeight: 900, letterSpacing: '4px',
+                        color: '#22d3ee', // Cyan Neon
+                        fontFamily: "'Courier New', monospace",
+                        textShadow: `
+                            0 0 5px #06b6d4,
+                            0 0 10px #06b6d4,
+                            0 0 20px #06b6d4,
+                            0 0 40px #0891b2
+                        `,
+                        filter: glitch ? 'hue-rotate(90deg)' : 'none'
                     }}
                 >
                     OVERRIDE777
@@ -589,34 +603,59 @@ export default function LuxurySlotMachine() {
                         </div>
 
                         {/* SPIN BUTTON */}
+                        {/* SPIN BUTTON - The Master Trigger */}
                         {gameState === "idle" && (
                             <motion.button
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                whileHover={{ scale: 1.02, boxShadow: '0 0 50px rgba(251, 191, 36, 0.6)' }}
-                                whileTap={{ scale: 0.98, y: 3 }}
+                                whileHover={{
+                                    scale: 1.02,
+                                    boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.4), 0 0 25px rgba(59, 130, 246, 0.6), 0 0 50px rgba(59, 130, 246, 0.3)' // Neon Blue Pulse
+                                }}
+                                whileTap={{
+                                    scale: 0.98,
+                                    y: 4, // Deep physical press
+                                    boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.4), 0 0 10px rgba(59, 130, 246, 0.4)'
+                                }}
                                 onClick={handleSpin}
                                 style={{
-                                    width: '100%', marginTop: '16px', padding: '20px',
-                                    borderRadius: '16px', border: 'none', cursor: 'pointer',
-                                    background: 'linear-gradient(180deg, #fcd34d 0%, #f59e0b 50%, #d97706 100%)',
-                                    boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.2), 0 4px 0 #b45309, 0 8px 30px rgba(251, 191, 36, 0.4)',
-                                    fontSize: '20px', fontWeight: 900, color: '#1a1a1a', letterSpacing: '3px',
-                                    textShadow: '0 1px 0 rgba(255,255,255,0.4)',
+                                    width: '100%', marginTop: '16px', padding: '22px',
+                                    borderRadius: '16px',
+                                    cursor: 'pointer',
+
+                                    // Gradient - Brushed Titan to Gold
+                                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
+
+                                    // 3D Physical Object Borders & Shadows
+                                    borderTop: '1px solid rgba(255,255,255,0.5)',
+                                    borderBottom: '1px solid rgba(0,0,0,0.3)',
+                                    borderLeft: '1px solid rgba(255,255,255,0.2)',
+                                    borderRight: '1px solid rgba(255,255,255,0.2)',
+
+                                    // Convex 3D Effect
+                                    boxShadow: `
+                                        inset 0 2px 4px rgba(255,255,255,0.4), /* Upper highlight */
+                                        0 8px 0 #92400e,                       /* 3D side depth */
+                                        0 15px 20px rgba(0,0,0,0.4)            /* Drop shadow */
+                                    `,
+
+                                    fontSize: '22px', fontWeight: 900, color: 'white', letterSpacing: '4px',
+                                    textShadow: '0 2px 0 rgba(0,0,0,0.2)',
                                     position: 'relative', overflow: 'hidden'
                                 }}
                             >
-                                {/* Shine */}
+                                {/* Sheen Animation - Diagonal Glare */}
                                 <motion.div
                                     animate={{ x: ['-100%', '200%'] }}
-                                    transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+                                    transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut', delay: 1 }}
                                     style={{
-                                        position: 'absolute', inset: 0, width: '40%',
-                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)',
-                                        transform: 'skewX(-15deg)'
+                                        position: 'absolute', inset: 0, width: '50%',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+                                        transform: 'skewX(-25deg)',
+                                        filter: 'blur(5px)'
                                     }}
                                 />
-                                <span style={{ position: 'relative', zIndex: 2 }}>🎰 {t('spin')}</span>
+                                <span style={{ position: 'relative', zIndex: 2, textTransform: 'uppercase' }}>{t('spin')}</span>
                             </motion.button>
                         )}
 
