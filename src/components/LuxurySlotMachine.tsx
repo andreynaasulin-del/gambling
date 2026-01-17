@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Copy, Check, Clock } from "lucide-react";
+import { useLanguage } from "./LanguageContext";
 
 // === ANALYTICS TRACKING ===
 declare global {
@@ -314,6 +315,7 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
 
 // === MAIN SLOT MACHINE ===
 export default function LuxurySlotMachine() {
+    const { t } = useLanguage();
     const [gameState, setGameState] = useState<"idle" | "spinning" | "won">("idle");
     const [stoppedReels, setStoppedReels] = useState(0);
     const [spinCount, setSpinCount] = useState(0);
@@ -534,7 +536,7 @@ export default function LuxurySlotMachine() {
                                     }}
                                 >
                                     <span style={{ fontSize: '14px', fontWeight: 900, color: '#fbbf24', letterSpacing: '3px' }}>
-                                        ★ MEGA JACKPOT ★
+                                        {t('megaJackpot')}
                                     </span>
                                 </motion.div>
                             </div>
@@ -560,7 +562,7 @@ export default function LuxurySlotMachine() {
                             {/* Status */}
                             <div style={{ textAlign: 'center', marginTop: '16px' }}>
                                 <span style={{ fontSize: '12px', color: 'rgba(251, 191, 36, 0.6)', fontFamily: 'monospace' }}>
-                                    {gameState === 'spinning' ? '• • •' : `Попытка ${spinCount + 1} из ${WIN_ON_SPIN}`}
+                                    {gameState === 'spinning' ? '• • •' : `${t('attempt')} ${spinCount + 1} ${t('of')} ${WIN_ON_SPIN}`}
                                 </span>
                             </div>
 
@@ -580,7 +582,7 @@ export default function LuxurySlotMachine() {
                                         style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }}
                                     />
                                     <span style={{ fontSize: '11px', color: '#ef4444', fontWeight: 600 }}>
-                                        Осталось мест: <span style={{ fontWeight: 800 }}>{spotsLeft}</span>
+                                        {t('spotsLeft')} <span style={{ fontWeight: 800 }}>{spotsLeft}</span>
                                     </span>
                                 </motion.div>
                             )}
@@ -614,7 +616,7 @@ export default function LuxurySlotMachine() {
                                         transform: 'skewX(-15deg)'
                                     }}
                                 />
-                                <span style={{ position: 'relative', zIndex: 2 }}>🎰 КРУТИТЬ</span>
+                                <span style={{ position: 'relative', zIndex: 2 }}>🎰 {t('spin')}</span>
                             </motion.button>
                         )}
 
@@ -669,11 +671,11 @@ export default function LuxurySlotMachine() {
                                 fontSize: '32px', fontWeight: 900, marginBottom: '8px',
                                 color: '#fbbf24',
                                 textShadow: '0 0 30px rgba(251, 191, 36, 0.6)'
-                            }}>ДЖЕКПОТ!</h2>
+                            }}>{t('jackpot')}</h2>
 
-                            <p style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>Доступ разблокирован</p>
+                            <p style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>{t('accessUnlocked')}</p>
                             <p style={{ fontSize: '14px', color: 'rgba(148, 163, 184, 0.8)', marginBottom: '20px' }}>
-                                Бонус <span style={{ color: '#fbbf24', fontWeight: 700 }}>+500%</span> готов к активации
+                                {t('bonusReady')} <span style={{ color: '#fbbf24', fontWeight: 700 }}>+500%</span> {t('bonusReadyEnd')}
                             </p>
 
                             <PromoCode onCopy={handleCopyCode} copied={copied} />
@@ -719,7 +721,7 @@ export default function LuxurySlotMachine() {
                                     transform: 'skewX(-15deg)'
                                 }}
                             />
-                            <span style={{ position: 'relative', zIndex: 2 }}>💰 ЗАБРАТЬ ВЫИГРЫШ НА 1WIN</span>
+                            <span style={{ position: 'relative', zIndex: 2 }}>💰 {t('claimBonus')}</span>
                         </motion.button>
 
                         {/* Trust */}
@@ -728,7 +730,7 @@ export default function LuxurySlotMachine() {
                             marginTop: '16px', fontSize: '11px', color: 'rgba(148, 163, 184, 0.7)'
                         }}>
                             <Clock size={12} color="#fbbf24" />
-                            <span>Резерв:</span>
+                            <span>{t('timeLeft')}</span>
                             <span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'white' }}>
                                 {String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}
                             </span>

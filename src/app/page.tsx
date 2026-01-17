@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Zap, Lock, Users } from "lucide-react";
+import { Shield, Zap, Lock } from "lucide-react";
 import LuxurySlotMachine from "@/components/LuxurySlotMachine";
+import { LanguageProvider, LanguageSwitcher, useLanguage } from "@/components/LanguageContext";
 
 // Floating Particles
 const Particles = () => (
@@ -29,17 +30,27 @@ const Particles = () => (
   </div>
 );
 
-const LIVE_MESSAGES = [
-  { user: "User_482", action: "получил +500% бонус", icon: "🎰" },
-  { user: "Player_129", action: "активировал 70 фриспинов", icon: "🎁" },
-  { user: "VIP_893", action: "выиграл джекпот $15,000", icon: "💰" },
-];
+// Wrapper component with Language Provider
+export default function OverrideXPrelandWrapper() {
+  return (
+    <LanguageProvider>
+      <OverrideXPreland />
+    </LanguageProvider>
+  );
+}
 
-export default function OverrideXPreland() {
+function OverrideXPreland() {
+  const { t } = useLanguage();
   const [sessionId, setSessionId] = useState('');
   const [onlineCount, setOnlineCount] = useState(0);
   const [feedIndex, setFeedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  const LIVE_MESSAGES = [
+    { user: "User_482", action: t('gotBonus'), icon: "🎰" },
+    { user: "Player_129", action: t('activatedSpins'), icon: "🎁" },
+    { user: "VIP_893", action: t('wonJackpot'), icon: "💰" },
+  ];
 
   useEffect(() => {
     // Simulate initial load
@@ -56,7 +67,7 @@ export default function OverrideXPreland() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => setFeedIndex(i => (i + 1) % LIVE_MESSAGES.length), 3000);
+    const interval = setInterval(() => setFeedIndex(i => (i + 1) % 3), 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -179,14 +190,17 @@ export default function OverrideXPreland() {
                 <Lock size={11} color="#3b82f6" />
                 <span>SESSION: {sessionId}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }}>
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
-                />
-                <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
-                <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>online</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <LanguageSwitcher />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }}>
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                    style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
+                  />
+                  <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
+                  <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>{t('online')}</span>
+                </div>
               </div>
             </div>
 
@@ -244,7 +258,7 @@ export default function OverrideXPreland() {
                   >
                     <Shield size={14} color="#3b82f6" />
                   </motion.div>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>VIP ACCESS</span>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>{t('vipAccess')}</span>
                 </motion.div>
               </div>
 
@@ -265,15 +279,15 @@ export default function OverrideXPreland() {
                   <span style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, #94a3b8 100%)',
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-                  }}>Испытай удачу:</span>
+                  }}>{t('tryLuck')}</span>
                   <br />
                   <span style={{
                     color: '#3b82f6',
                     textShadow: '0 0 40px rgba(59, 130, 246, 0.6)'
-                  }}>Твой персональный бонус</span>
+                  }}>{t('personalBonus')}</span>
                 </motion.h1>
                 <p style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '13px' }}>
-                  Эксклюзивный доступ к приватному раунду бонусной игры.
+                  {t('exclusiveAccess')}
                 </p>
               </div>
             </div>
