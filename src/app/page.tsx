@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Zap, Clock } from "lucide-react";
 import LuxurySlotMachine from "@/components/LuxurySlotMachine";
+import { LanguageProvider, useLanguage, LanguageSwitcher } from "@/components/LanguageContext";
 
 // Floating Particles (reduced for mobile perf)
 const Particles = () => (
@@ -29,16 +30,17 @@ const Particles = () => (
   </div>
 );
 
-export default function OverrideXPreland() {
+function MainContent() {
+  const { t } = useLanguage();
   const [onlineCount, setOnlineCount] = useState(0);
   const [feedIndex, setFeedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [countdown, setCountdown] = useState({ minutes: 14, seconds: 59 });
 
   const LIVE_MESSAGES = [
-    { user: "User_482", action: "got +500% bonus", icon: "🎰" },
-    { user: "Player_129", action: "activated 70 free spins", icon: "🎁" },
-    { user: "VIP_893", action: "won jackpot $15,000", icon: "💰" },
+    { user: "User_482", action: t('gotBonus'), icon: "🎰" },
+    { user: "Player_129", action: t('activatedSpins'), icon: "🎁" },
+    { user: "VIP_893", action: t('wonJackpot'), icon: "💰" },
   ];
 
   useEffect(() => {
@@ -140,7 +142,7 @@ export default function OverrideXPreland() {
               transition={{ repeat: Infinity, duration: 1.5 }}
               style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '14px' }}
             >
-              Loading VIP access...
+              {t('loading')}
             </motion.div>
           </motion.div>
         ) : (
@@ -170,14 +172,14 @@ export default function OverrideXPreland() {
               boxShadow: '0 0 20px #3b82f6'
             }} />
 
-            {/* Top Bar — Countdown + Online (no Encrypted Session) */}
+            {/* Top Bar — Countdown + Online */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '8px 12px',
               borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
               background: 'rgba(0, 0, 0, 0.3)'
             }}>
-              {/* Countdown Timer — visible from start */}
+              {/* Countdown Timer */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
                 fontSize: '11px', fontWeight: 700, color: '#ef4444',
@@ -187,6 +189,9 @@ export default function OverrideXPreland() {
                 <span>{String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}</span>
               </div>
 
+              {/* Language Switcher */}
+              <LanguageSwitcher />
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px' }}>
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
@@ -194,7 +199,7 @@ export default function OverrideXPreland() {
                   style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
                 />
                 <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
-                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '9px' }}>online</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '9px' }}>{t('online')}</span>
               </div>
             </div>
 
@@ -235,7 +240,7 @@ export default function OverrideXPreland() {
                     }}
                   />
                   <Shield size={12} color="#3b82f6" />
-                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>VIP ACCESS</span>
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>{t('vipAccess')}</span>
                 </motion.div>
               </div>
 
@@ -251,15 +256,15 @@ export default function OverrideXPreland() {
                   <span style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, #94a3b8 100%)',
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-                  }}>Try Your Luck</span>
+                  }}>{t('tryLuck')}</span>
                   <br />
                   <span style={{
                     color: '#3b82f6',
                     textShadow: '0 0 40px rgba(59, 130, 246, 0.6)'
-                  }}>+500% Personal Bonus</span>
+                  }}>{t('personalBonus')}</span>
                 </h1>
                 <p style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '12px' }}>
-                  Exclusive access for new players only
+                  {t('exclusiveAccess')}
                 </p>
               </div>
             </div>
@@ -313,8 +318,8 @@ export default function OverrideXPreland() {
               background: 'rgba(0, 0, 0, 0.2)'
             }}>
               {[
-                { icon: <Zap size={9} />, label: 'Secure' },
-                { icon: <Shield size={9} />, label: 'SSL 256-bit' },
+                { icon: <Zap size={9} />, label: t('secure') },
+                { icon: <Shield size={9} />, label: t('ssl') },
                 { icon: null, label: '18+' }
               ].map((badge, i) => (
                 <div key={i} style={{
@@ -332,5 +337,13 @@ export default function OverrideXPreland() {
         )}
       </AnimatePresence>
     </main>
+  );
+}
+
+export default function OverrideXPreland() {
+  return (
+    <LanguageProvider>
+      <MainContent />
+    </LanguageProvider>
   );
 }

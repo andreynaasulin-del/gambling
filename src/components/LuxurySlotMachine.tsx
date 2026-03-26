@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Copy, Check, Clock } from "lucide-react";
+import { useLanguage } from "@/components/LanguageContext";
 
 // === ANALYTICS TRACKING ===
 declare global {
@@ -137,6 +138,7 @@ const Reel = ({ isSpinning, stopDelay, finalSymbol, onStopped }: {
 
 // === PROMO CODE ===
 const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) => {
+    const { t } = useLanguage();
     const [glitch, setGlitch] = useState(false);
     useEffect(() => {
         const interval = setInterval(() => { setGlitch(true); setTimeout(() => setGlitch(false), 150); }, 4000);
@@ -151,7 +153,7 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
             fontFamily: "'Orbitron', monospace", width: '100%', boxSizing: 'border-box'
         }}>
             <div style={{ fontSize: '9px', color: '#64748b', fontFamily: 'monospace', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                • SECRET KEY GENERATED •
+                • {t('promoCode')} •
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                 <motion.span
@@ -176,13 +178,14 @@ const PromoCode = ({ onCopy, copied }: { onCopy: () => void; copied: boolean }) 
                     {copied ? <Check size={18} color="#22c55e" /> : <Copy size={18} color="#fbbf24" />}
                 </button>
             </div>
-            {copied && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: '6px', fontSize: '11px', color: '#22c55e' }}>✓ Copied!</motion.p>}
+            {copied && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: '6px', fontSize: '11px', color: '#22c55e' }}>✓ {t('copied')}</motion.p>}
         </div>
     );
 };
 
 // === MAIN SLOT MACHINE ===
 export default function LuxurySlotMachine() {
+    const { t } = useLanguage();
     const [gameState, setGameState] = useState<"idle" | "spinning" | "won">("idle");
     const [stoppedReels, setStoppedReels] = useState(0);
     const [spinCount, setSpinCount] = useState(0);
@@ -325,7 +328,7 @@ export default function LuxurySlotMachine() {
                                         border: '2px solid rgba(251, 191, 36, 0.5)'
                                     }}
                                 >
-                                    <span style={{ fontSize: '12px', fontWeight: 900, color: '#fbbf24', letterSpacing: '3px' }}>MEGA JACKPOT</span>
+                                    <span style={{ fontSize: '12px', fontWeight: 900, color: '#fbbf24', letterSpacing: '3px' }}>{t('megaJackpot')}</span>
                                 </motion.div>
                             </div>
 
@@ -344,7 +347,7 @@ export default function LuxurySlotMachine() {
                             {/* Status */}
                             <div style={{ textAlign: 'center', marginTop: '10px' }}>
                                 <span style={{ fontSize: '11px', color: 'rgba(251, 191, 36, 0.6)', fontFamily: 'monospace' }}>
-                                    {gameState === 'spinning' ? '• • •' : `Attempt ${spinCount + 1} of ${WIN_ON_SPIN}`}
+                                    {gameState === 'spinning' ? '• • •' : `${t('attempt')} ${spinCount + 1} ${t('of')} ${WIN_ON_SPIN}`}
                                 </span>
                             </div>
 
@@ -357,7 +360,7 @@ export default function LuxurySlotMachine() {
                                         style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }}
                                     />
                                     <span style={{ fontSize: '10px', color: '#ef4444', fontWeight: 600 }}>
-                                        Spots left: <span style={{ fontWeight: 800 }}>{spotsLeft}</span>
+                                        {t('spotsLeft')} <span style={{ fontWeight: 800 }}>{spotsLeft}</span>
                                     </span>
                                 </motion.div>
                             )}
@@ -404,7 +407,7 @@ export default function LuxurySlotMachine() {
                                         transform: 'skewX(-25deg)', filter: 'blur(5px)'
                                     }}
                                 />
-                                <span style={{ position: 'relative', zIndex: 2, textTransform: 'uppercase' }}>SPIN</span>
+                                <span style={{ position: 'relative', zIndex: 2, textTransform: 'uppercase' }}>{t('spin')}</span>
                             </motion.button>
                         )}
 
@@ -414,7 +417,6 @@ export default function LuxurySlotMachine() {
                                 <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.6, ease: "linear" }}
                                     style={{ display: 'inline-block', width: '28px', height: '28px', border: '3px solid #fbbf24', borderTopColor: 'transparent', borderRadius: '50%' }}
                                 />
-                                <p style={{ marginTop: '8px', fontWeight: 700, color: '#fbbf24', fontSize: '13px' }}>SPINNING...</p>
                             </div>
                         )}
                     </motion.div>
@@ -432,10 +434,10 @@ export default function LuxurySlotMachine() {
                         }}>
                             <motion.div animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 2 }}
                                 style={{ fontSize: '56px', marginBottom: '12px' }}>🏆</motion.div>
-                            <h2 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '6px', color: '#fbbf24', textShadow: '0 0 30px rgba(251, 191, 36, 0.6)' }}>JACKPOT!</h2>
-                            <p style={{ fontSize: '16px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>Access Unlocked!</p>
+                            <h2 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '6px', color: '#fbbf24', textShadow: '0 0 30px rgba(251, 191, 36, 0.6)' }}>{t('jackpot')}</h2>
+                            <p style={{ fontSize: '16px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>{t('accessUnlocked')}</p>
                             <p style={{ fontSize: '13px', color: 'rgba(148, 163, 184, 0.8)', marginBottom: '16px' }}>
-                                Your bonus of <span style={{ color: '#fbbf24', fontWeight: 700 }}>+500%</span> is ready to claim
+                                {t('bonusReady')} <span style={{ color: '#fbbf24', fontWeight: 700 }}>+500%</span> {t('bonusReadyEnd')}
                             </p>
                             <PromoCode onCopy={handleCopyCode} copied={copied} />
                         </div>
@@ -466,13 +468,13 @@ export default function LuxurySlotMachine() {
                             <motion.div animate={{ x: ['-100%', '200%'] }} transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
                                 style={{ position: 'absolute', inset: 0, width: '40%', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)', transform: 'skewX(-15deg)' }}
                             />
-                            <span style={{ position: 'relative', zIndex: 2 }}>💰 CLAIM YOUR BONUS</span>
+                            <span style={{ position: 'relative', zIndex: 2 }}>💰 {t('claimBonus')}</span>
                         </motion.button>
 
                         {/* Trust footer */}
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px', fontSize: '10px', color: 'rgba(148, 163, 184, 0.7)' }}>
                             <Clock size={11} color="#fbbf24" />
-                            <span>Time left:</span>
+                            <span>{t('timeLeft')}</span>
                             <span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'white' }}>
                                 {String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}
                             </span>
