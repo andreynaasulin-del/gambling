@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Zap, Lock } from "lucide-react";
+import { Shield, Zap, Clock } from "lucide-react";
 import LuxurySlotMachine from "@/components/LuxurySlotMachine";
-import { LanguageProvider, LanguageSwitcher, useLanguage } from "@/components/LanguageContext";
 
-// Floating Particles
+// Floating Particles (reduced for mobile perf)
 const Particles = () => (
   <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
-    {[...Array(40)].map((_, i) => (
+    {[...Array(20)].map((_, i) => (
       <motion.div
         key={i}
         initial={{ x: `${Math.random() * 100}%`, y: `${Math.random() * 100}%`, opacity: 0 }}
@@ -30,39 +29,24 @@ const Particles = () => (
   </div>
 );
 
-// Wrapper component with Language Provider
-export default function OverrideXPrelandWrapper() {
-  return (
-    <LanguageProvider>
-      <OverrideXPreland />
-    </LanguageProvider>
-  );
-}
-
-function OverrideXPreland() {
-  const { t } = useLanguage();
-  const [sessionId, setSessionId] = useState('');
+export default function OverrideXPreland() {
   const [onlineCount, setOnlineCount] = useState(0);
   const [feedIndex, setFeedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [countdown, setCountdown] = useState({ minutes: 14, seconds: 59 });
 
   const LIVE_MESSAGES = [
-    { user: "User_482", action: t('gotBonus'), icon: "🎰" },
-    { user: "Player_129", action: t('activatedSpins'), icon: "🎁" },
-    { user: "VIP_893", action: t('wonJackpot'), icon: "💰" },
+    { user: "User_482", action: "got +500% bonus", icon: "🎰" },
+    { user: "Player_129", action: "activated 70 free spins", icon: "🎁" },
+    { user: "VIP_893", action: "won jackpot $15,000", icon: "💰" },
   ];
 
   useEffect(() => {
-    // Simulate initial load
-    const timer = setTimeout(() => setIsLoading(false), 800);
+    const timer = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const chars = '0123456789ABCDEF';
-    let id = '';
-    for (let i = 0; i < 8; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
-    setSessionId(id);
     setOnlineCount(Math.floor(Math.random() * 500) + 1200);
   }, []);
 
@@ -71,60 +55,59 @@ function OverrideXPreland() {
     return () => clearInterval(interval);
   }, []);
 
+  // Countdown starts immediately (urgency from the start)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { minutes: prev.minutes - 1, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const feed = LIVE_MESSAGES[feedIndex];
 
   const cardStyle: React.CSSProperties = {
-    // Glassmorphism 2.0 - Heavy Glass
     background: 'rgba(13, 18, 30, 0.75)',
     backdropFilter: 'blur(25px)',
     WebkitBackdropFilter: 'blur(25px)',
     borderRadius: '24px',
-
-    // Titanium Border (1px metallic gradient)
     border: '1px solid rgba(255, 255, 255, 0.08)',
     borderTop: '1px solid rgba(255, 255, 255, 0.15)',
     borderBottom: '1px solid rgba(0, 0, 0, 0.4)',
-
-    // Deep Layered Shadows (Floating Effect)
     boxShadow: `
-      inset 0 0 0 1px rgba(255, 255, 255, 0.03), /* Inner edge definition */
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),   /* Top inner highlight */
-      0 20px 40px -10px rgba(0, 0, 0, 0.8),      /* Deep drop shadow */
-      0 0 20px rgba(0, 0, 0, 0.5),               /* Ambient soft shadow */
-      0 0 0 1px rgba(0, 0, 0, 0.2)               /* Outer dark rim */
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 20px 40px -10px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(0, 0, 0, 0.2)
     `,
-
     overflow: 'hidden',
     position: 'relative'
   };
 
   return (
     <main style={{
-      minHeight: '100vh',
+      minHeight: '100dvh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '16px',
+      padding: '8px',
       background: '#030712',
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background Creative Image */}
+      {/* Background */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
+        position: 'absolute', inset: 0,
         backgroundImage: 'url(/bg-creative-opt.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'no-repeat',
-        opacity: 0.4,
-        filter: 'blur(2px)'
+        backgroundSize: 'cover', backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat', opacity: 0.4, filter: 'blur(2px)'
       }} />
-
-      {/* Dark Overlay */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
+        position: 'absolute', inset: 0,
         background: 'linear-gradient(180deg, rgba(3, 7, 18, 0.3) 0%, rgba(3, 7, 18, 0.7) 50%, rgba(3, 7, 18, 0.95) 100%)'
       }} />
 
@@ -132,7 +115,6 @@ function OverrideXPreland() {
 
       <AnimatePresence mode="wait">
         {isLoading ? (
-          /* Loading Skeleton */
           <motion.div
             key="loader"
             initial={{ opacity: 0 }}
@@ -150,8 +132,7 @@ function OverrideXPreland() {
               style={{
                 width: '50px', height: '50px', margin: '0 auto 20px',
                 border: '3px solid rgba(59, 130, 246, 0.2)',
-                borderTopColor: '#3b82f6',
-                borderRadius: '50%'
+                borderTopColor: '#3b82f6', borderRadius: '50%'
               }}
             />
             <motion.div
@@ -159,11 +140,10 @@ function OverrideXPreland() {
               transition={{ repeat: Infinity, duration: 1.5 }}
               style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '14px' }}
             >
-              Загрузка VIP доступа...
+              Loading VIP access...
             </motion.div>
           </motion.div>
         ) : (
-          /* Main Card */
           <motion.div
             key="content"
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -190,74 +170,60 @@ function OverrideXPreland() {
               boxShadow: '0 0 20px #3b82f6'
             }} />
 
-            {/* Top Bar */}
+            {/* Top Bar — Countdown + Online (no Encrypted Session) */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 12px',
+              padding: '8px 12px',
               borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
               background: 'rgba(0, 0, 0, 0.3)'
             }}>
+              {/* Countdown Timer — visible from start */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                fontFamily: "'JetBrains Mono', monospace", fontSize: '9px',
-                color: '#3b82f6', background: 'rgba(59, 130, 246, 0.1)',
-                padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(59, 130, 246, 0.2)',
-                maxWidth: '140px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'
+                display: 'flex', alignItems: 'center', gap: '6px',
+                fontSize: '11px', fontWeight: 700, color: '#ef4444',
+                fontFamily: "'JetBrains Mono', monospace"
               }}>
-                <Lock size={10} />
-                <span>ENCRYPTED SESSION: {sessionId.substring(0, 8)}</span>
+                <Clock size={12} color="#ef4444" />
+                <span>{String(countdown.minutes).padStart(2, '0')}:{String(countdown.seconds).padStart(2, '0')}</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <LanguageSwitcher />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px' }}>
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
-                  />
-                  <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
-                </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px' }}>
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 10px #22c55e' }}
+                />
+                <span style={{ color: '#22c55e', fontWeight: 700 }}>{onlineCount}</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '9px' }}>online</span>
               </div>
             </div>
 
-            {/* Header */}
-            <div style={{ padding: '20px 16px 12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                {/* Logo - 1win with blend mode to hide dark bg */}
+            {/* Header — Compact */}
+            <div style={{ padding: '12px 16px 8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                {/* Logo */}
                 <motion.div
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                   style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                 >
-                  <img
-                    src="/1win-logo.png"
-                    alt="1win"
-                    style={{
-                      height: '32px',
-                      mixBlendMode: 'lighten'
-                    }}
-                  />
+                  <img src="/1win-logo.png" alt="1win" style={{ height: '28px', mixBlendMode: 'lighten' }} />
                 </motion.div>
 
                 {/* VIP Badge */}
                 <motion.div
                   animate={{
                     boxShadow: ['0 0 15px rgba(59, 130, 246, 0.3)', '0 0 30px rgba(139, 92, 246, 0.6)', '0 0 15px rgba(59, 130, 246, 0.3)'],
-                    scale: [1, 1.02, 1]
                   }}
                   transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-                  whileHover={{ scale: 1.05 }}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                    padding: '10px 18px', borderRadius: '50px',
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '8px 14px', borderRadius: '50px',
                     background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%)',
                     border: '1px solid rgba(59, 130, 246, 0.5)',
-                    cursor: 'pointer',
-                    position: 'relative',
-                    overflow: 'hidden'
+                    position: 'relative', overflow: 'hidden'
                   }}
                 >
-                  {/* Shimmer effect */}
                   <motion.div
                     animate={{ x: ['-100%', '200%'] }}
                     transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
@@ -268,70 +234,58 @@ function OverrideXPreland() {
                       transform: 'skewX(-20deg)'
                     }}
                   />
-                  <motion.div
-                    animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                  >
-                    <Shield size={14} color="#3b82f6" />
-                  </motion.div>
-                  <span style={{ fontSize: '11px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>{t('vipAccess')}</span>
+                  <Shield size={12} color="#3b82f6" />
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#3b82f6', letterSpacing: '1px', position: 'relative' }}>VIP ACCESS</span>
                 </motion.div>
               </div>
 
-              {/* Glowing Divider */}
+              {/* Divider */}
               <div style={{
-                height: '1px', margin: '0 0 20px',
+                height: '1px', margin: '0 0 12px',
                 background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent)',
-                boxShadow: '0 0 10px rgba(59, 130, 246, 0.2)'
               }} />
 
-              {/* Title */}
+              {/* Title — Compact */}
               <div style={{ textAlign: 'center' }}>
-                <motion.h1
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{ fontSize: '24px', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: '8px' }}
-                >
+                <h1 style={{ fontSize: '20px', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: '4px' }}>
                   <span style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, #94a3b8 100%)',
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-                  }}>{t('tryLuck')}</span>
+                  }}>Try Your Luck</span>
                   <br />
                   <span style={{
                     color: '#3b82f6',
                     textShadow: '0 0 40px rgba(59, 130, 246, 0.6)'
-                  }}>{t('personalBonus')}</span>
-                </motion.h1>
-                <p style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '13px' }}>
-                  {t('exclusiveAccess')}
+                  }}>+500% Personal Bonus</span>
+                </h1>
+                <p style={{ color: 'rgba(148, 163, 184, 0.8)', fontSize: '12px' }}>
+                  Exclusive access for new players only
                 </p>
               </div>
             </div>
 
             {/* Slot Machine */}
-            <div style={{ padding: '0 16px 16px' }}>
+            <div style={{ padding: '0 12px 12px' }}>
               <LuxurySlotMachine />
             </div>
 
             {/* Live Feed */}
-            <div style={{ padding: '0 16px 16px' }}>
+            <div style={{ padding: '0 12px 12px' }}>
               <div style={{
-                borderRadius: '12px', padding: '12px 16px',
+                borderRadius: '10px', padding: '10px 14px',
                 background: 'rgba(5, 7, 10, 0.6)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
                   <motion.div
                     animate={{ opacity: [1, 0.5, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e' }}
+                    style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e' }}
                   />
-                  <span style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>LIVE</span>
+                  <span style={{ fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>LIVE</span>
                 </div>
-
-                <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.1)' }} />
-
+                <div style={{ width: '1px', height: '12px', background: 'rgba(255, 255, 255, 0.1)' }} />
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={feedIndex}
@@ -340,12 +294,9 @@ function OverrideXPreland() {
                     exit={{ opacity: 0, y: -5 }}
                     transition={{ duration: 0.3 }}
                     style={{
-                      fontSize: '11px',
-                      color: 'rgba(255, 255, 255, 0.7)',
+                      fontSize: '10px', color: 'rgba(255, 255, 255, 0.7)',
                       fontFamily: "'JetBrains Mono', 'Consolas', monospace",
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
                     }}
                   >
                     <span style={{ color: '#64748b' }}>{feed.user}:</span> {feed.action}
@@ -356,24 +307,24 @@ function OverrideXPreland() {
 
             {/* Footer */}
             <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-              padding: '16px 24px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              padding: '10px 16px',
               borderTop: '1px solid rgba(255, 255, 255, 0.05)',
               background: 'rgba(0, 0, 0, 0.2)'
             }}>
               {[
-                { icon: <Zap size={10} />, label: t('secure') },
-                { icon: <Shield size={10} />, label: t('ssl') },
+                { icon: <Zap size={9} />, label: 'Secure' },
+                { icon: <Shield size={9} />, label: 'SSL 256-bit' },
                 { icon: null, label: '18+' }
               ].map((badge, i) => (
                 <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '6px 10px', borderRadius: '6px',
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                  padding: '4px 8px', borderRadius: '6px',
                   background: 'rgba(255, 255, 255, 0.03)',
                   border: '1px solid rgba(255, 255, 255, 0.04)'
                 }}>
                   {badge.icon && <span style={{ color: '#3b82f6' }}>{badge.icon}</span>}
-                  <span style={{ fontSize: '9px', fontWeight: 600, color: 'rgba(148, 163, 184, 0.8)', letterSpacing: '0.5px' }}>{badge.label}</span>
+                  <span style={{ fontSize: '8px', fontWeight: 600, color: 'rgba(148, 163, 184, 0.8)', letterSpacing: '0.5px' }}>{badge.label}</span>
                 </div>
               ))}
             </div>

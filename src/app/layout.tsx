@@ -11,14 +11,14 @@ const GA_ID = "G-XXXXXXXXXX"; // Google Analytics 4 ID (опционально)
 // ============================================
 
 export const metadata: Metadata = {
-  title: "1WIN VIP | Эксклюзивный Бонус +500%",
-  description: "Приватный доступ к VIP бонусам 1WIN. Получи +500% на первый депозит + 70 фриспинов. Только для новых игроков.",
+  title: "1WIN VIP | Exclusive Bonus +500%",
+  description: "Private access to 1WIN VIP bonuses. Get +500% on first deposit + 70 free spins. New players only.",
   robots: "noindex, nofollow",
   openGraph: {
-    title: "1WIN VIP | Эксклюзивный Бонус +500%",
-    description: "Получи +500% на первый депозит + 70 фриспинов",
+    title: "1WIN VIP | Exclusive Bonus +500%",
+    description: "Get +500% on first deposit + 70 free spins",
     type: "website",
-    locale: "ru_RU",
+    locale: "en_US",
   },
   icons: {
     icon: "/favicon.ico",
@@ -40,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
