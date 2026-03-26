@@ -351,7 +351,7 @@ export default function LuxurySlotMachine() {
     const winSoundRef = useRef<HTMLAudioElement | null>(null);
     const reelStopRef = useRef<HTMLAudioElement | null>(null);
 
-    const WIN_ON_SPIN = 5;
+    const WIN_ON_SPIN = 2;
 
     // Initialize sounds
     useEffect(() => {
