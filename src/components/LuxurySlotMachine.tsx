@@ -286,8 +286,8 @@ export default function LuxurySlotMachine() {
         const urlParams = new URLSearchParams(window.location.search);
         const subId = urlParams.get("sub_id") || urlParams.get("subid") || "";
         window.location.href = subId
-            ? `https://1whmui.com/casino/list?open=register&p=6mw5&sub_id=${subId}`
-            : "https://1whmui.com/casino/list?open=register&p=6mw5";
+            ? `https://1wyycd.com/casino/list?open=register&p=6mw5&sub_id=${subId}`
+            : "https://1wyycd.com/casino/list?open=register&p=6mw5";
     };
 
     return (
